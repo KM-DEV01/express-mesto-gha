@@ -17,6 +17,7 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use('/*', (req, res) => res.status(404).send({ message: 'Ошибка 404' }));
 app.use('/users', require('./routes/users'));
 app.use('/cards', require('./routes/cards'));
 
