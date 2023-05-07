@@ -17,7 +17,7 @@ function handleErrorOnCreate(err, res) {
 
 function handleErrorOnUpdate(err, res) {
   if (err.name === 'ValidationError') {
-    return res.status(400).send({ message: 'Переданы некорректные данные при обновлении профиля.' });
+    return res.status(400).send({ message: 'Переданы некорректные данные при обновлении записи.' });
   }
   if (err.name === 'CastError') {
     return res.status(400).send({ message: 'Некорректный запрос.' });

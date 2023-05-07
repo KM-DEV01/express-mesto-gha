@@ -9,7 +9,7 @@ module.exports.getCards = (req, res) => {
 };
 
 module.exports.deleteCard = (req, res) => {
-  Card.findByIdAndDelete(req.params.cardId)
+  Card.findByIdAndDelete(req.params.cardId, { new: true })
     .orFail()
     .then((card) => res.send({ data: card }))
     .catch((err) => handleErrorOnUpdate(err, res));
