@@ -3,13 +3,13 @@ const { handleErrorOnSearch, handleErrorOnCreate, handleErrorOnUpdate } = requir
 
 module.exports.getCards = (req, res) => {
   Card.find({})
-    .orFail()
     .then((cards) => res.send({ data: cards }))
     .catch((err) => handleErrorOnSearch(err, res));
 };
 
 module.exports.deleteCard = (req, res) => {
   Card.findByIdAndDelete(req.params.cardId, { new: true })
+    .orFail()
     .then(() => res.send({ message: 'Карточка удалена' }))
     .catch((err) => handleErrorOnUpdate(err, res));
 };
