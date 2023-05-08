@@ -1,10 +1,12 @@
 const Card = require('../models/card');
-const { handleErrorOnSearch, handleErrorOnCreate, handleErrorOnUpdate } = require('../utils/errorHandler');
+const {
+  handleErrorOnCreate, handleErrorOnUpdate, handleDefaultError,
+} = require('../utils/errorHandler');
 
 module.exports.getCards = (req, res) => {
   Card.find({})
     .then((cards) => res.send({ data: cards }))
-    .catch((err) => handleErrorOnSearch(err, res));
+    .catch((err) => handleDefaultError(err, res));
 };
 
 module.exports.deleteCard = (req, res) => {

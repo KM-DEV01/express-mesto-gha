@@ -1,31 +1,44 @@
+const mongoose = require('mongoose');
+const { writeLog } = require('../files/logWriter');
+
+const BAD_REQUEST = 400;
+const NOT_FOUND = 404;
+const INTERNAL_ERROR = 500;
+
+function handleDefaultError(err, res) {
+  writeLog(err);
+  return res.status(INTERNAL_ERROR).send({ message: 'Произошла ошибка.' });
+}
 function handleErrorOnSearch(err, res) {
-  if (err.name === 'CastError') {
-    return res.status(400).send({ message: 'Некорректный запрос.' });
+  if (err instanceof mongoose.Error.CastError) {
+    return res.status(BAD_REQUEST).send({ message: 'Некорректный запрос.' });
   }
-  if (err.name === 'DocumentNotFoundError') {
-    return res.status(404).send({ message: 'Запись по указанному _id не найдена.' });
+  if (err instanceof mongoose.Error.DocumentNotFoundError) {
+    return res.status(NOT_FOUND).send({ message: 'Запись по указанному _id не найдена.' });
   }
-  return res.status(500).send({ message: `Произошла ошибка: ${err.message}.` });
+  return handleDefaultError(err, res);
 }
 
 function handleErrorOnCreate(err, res) {
-  if (err.name === 'ValidationError') {
-    return res.status(400).send({ message: 'Ошибка валидации. Поля заполнены некорректно или не заполнены.' });
+  if (err instanceof mongoose.Error.ValidationError) {
+    return res.status(BAD_REQUEST).send({ message: 'Ошибка валидации. Поля заполнены некорректно или не заполнены.' });
   }
-  return res.status(500).send({ message: `Произошла ошибка: ${err.message}.` });
+  return handleDefaultError(err, res);
 }
 
 function handleErrorOnUpdate(err, res) {
-  if (err.name === 'ValidationError') {
-    return res.status(400).send({ message: 'Переданы некорректные данные при обновлении записи.' });
+  if (err instanceof mongoose.Error.ValidationError) {
+    return res.status(BAD_REQUEST).send({ message: 'Переданы некорректные данные при обновлении записи.' });
   }
-  if (err.name === 'CastError') {
-    return res.status(400).send({ message: 'Некорректный запрос.' });
+  if (err instanceof mongoose.Error.CastError) {
+    return res.status(BAD_REQUEST).send({ message: 'Некорректный запрос.' });
   }
-  if (err.name === 'DocumentNotFoundError') {
-    return res.status(404).send({ message: 'Запись по указанному _id не найдена.' });
+  if (err instanceof mongoose.Error.DocumentNotFoundError) {
+    return res.status(NOT_FOUND).send({ message: 'Запись по указанному _id не найдена.' });
   }
-  return res.status(500).send({ message: `Произошла ошибка: ${err.message}.` });
+  return handleDefaultError(err, res);
 }
 
-module.exports = { handleErrorOnSearch, handleErrorOnCreate, handleErrorOnUpdate };
+module.exports = {
+  handleErrorOnSearch, handleErrorOnCreate, handleErrorOnUpdate, handleDefaultError,
+};
