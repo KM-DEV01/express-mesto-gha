@@ -23,5 +23,5 @@ module.exports = (err, req, res, next) => {
     res.status(BAD_REQUEST).send({ message: 'Ошибка валидации' });
     return;
   }
-  res.status(err.statusCode).send({ error: err.message });
+  res.status(err.statusCode).send({ message: err.message });
 };
