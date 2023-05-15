@@ -1,1 +1,1 @@
-{"error":{"name":"ValidationError","message":"card validation failed: name: Path `name` (`t`) is shorter than the minimum allowed length (2)."}}
+{"error":{"name":"MongoServerError","message":"E11000 duplicate key error collection: mestodb.users index: email_1 dup key: { email: \"test@mail2.ru\" }","code":11000}}
