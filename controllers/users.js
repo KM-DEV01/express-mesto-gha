@@ -37,16 +37,22 @@ module.exports.getUserById = (req, res, next) => {
 };
 
 module.exports.createUser = (req, res, next) => {
-  const {
-    name, about, avatar, email, password,
-  } = req.body;
+  const { password } = req.body;
 
   bcrypt.hash(password, 10)
     .then((hash) => {
       User.create({
-        name, about, avatar, email, password: hash,
+        ...req.body,
+        password: hash,
       })
-        .then((user) => res.send({ data: user }))
+        .then((user) => {
+          const {
+            _id, name, about, avatar, email,
+          } = user;
+          res.send({
+            name, about, avatar, email, password, _id,
+          });
+        })
         .catch(next);
     });
 };

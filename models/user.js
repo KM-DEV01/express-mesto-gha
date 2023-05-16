@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const validator = require('validator');
 const bcrypt = require('bcryptjs');
 
 const NotFoundError = require('../errors/not-found-err');
@@ -33,7 +32,6 @@ const userSchema = new mongoose.Schema({
     type: String,
     require: true,
     unique: true,
-    validate: [validator.isEmail, 'Ошибка валидации'],
   },
   password: {
     type: String,
