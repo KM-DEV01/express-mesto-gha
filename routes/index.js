@@ -3,14 +3,14 @@ const router = require('express').Router();
 const { errors } = require('celebrate');
 const { auth } = require('../controllers/users');
 const { createUser } = require('../controllers/users');
-const { userModelValidator, signInValidator } = require('../validators/user-validator');
+const { signUpValidator, signInValidator } = require('../validators/user-validator');
 
 const NOT_FOUND = 404;
 
 router.use(express.json());
 
 router.use('/signin', signInValidator, auth);
-router.use('/signup', userModelValidator, createUser);
+router.use('/signup', signUpValidator, createUser);
 
 router.use(require('../midlewares/auth'));
 
