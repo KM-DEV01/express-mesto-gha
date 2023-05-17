@@ -3,6 +3,8 @@ const Card = require('../models/card');
 const NotFoundError = require('../errors/not-found-err');
 const ForbiddenError = require('../errors/forbidden-err');
 
+const CREATED = 201;
+
 module.exports.getCards = (req, res, next) => {
   Card.find({})
     .then((cards) => res.send({ data: cards }))
@@ -29,7 +31,7 @@ module.exports.deleteCard = (req, res, next) => Card.findById(req.params.cardId)
 module.exports.createCard = (req, res, next) => {
   const { name, link } = req.body;
   Card.create({ name, link, owner: req.user._id })
-    .then((card) => res.send({ data: card }))
+    .then((card) => res.status(CREATED).send({ data: card }))
     .catch(next);
 };
 

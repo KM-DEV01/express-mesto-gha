@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
+const validator = require('validator');
 const { linkExp } = require('../consts/regex');
 const UnauthorizedError = require('../errors/unauth-err');
 
@@ -19,9 +20,7 @@ const userSchema = new mongoose.Schema({
   avatar: {
     type: String,
     validate: {
-      validator(v) {
-        return linkExp.test(v);
-      },
+      validator: (v) => linkExp.test(v),
       message: (props) => `${props.value} некорректный URL!`,
     },
     default: 'https://pictures.s3.yandex.net/resources/jacques-cousteau_1604399756.png',
@@ -30,10 +29,13 @@ const userSchema = new mongoose.Schema({
     type: String,
     require: true,
     unique: true,
+    validate: {
+      validator: (v) => validator.isEmail(v),
+      message: 'Поле "email" должно быть валидным email-адресом',
+    },
   },
   password: {
     type: String,
-    minLength: 8,
     required: true,
     select: false,
   },

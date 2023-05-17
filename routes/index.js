@@ -1,25 +1,15 @@
-const express = require('express');
 const router = require('express').Router();
-const { errors } = require('celebrate');
 const { auth } = require('../controllers/users');
 const { createUser } = require('../controllers/users');
 const { signUpValidator, signInValidator } = require('../validators/user-validator');
+const NotFoundError = require('../errors/not-found-err');
 
-const NOT_FOUND = 404;
+router.post('/signin', signInValidator, auth);
+router.post('/signup', signUpValidator, createUser);
 
-router.use(express.json());
+router.use('/users', require('../midlewares/auth'), require('./users'));
+router.use('/cards', require('../midlewares/auth'), require('./cards'));
 
-router.use('/signin', signInValidator, auth);
-router.use('/signup', signUpValidator, createUser);
-
-router.use(require('../midlewares/auth'));
-
-router.use('/users', require('./users'));
-router.use('/cards', require('./cards'));
-
-router.use(errors());
-router.use(require('../midlewares/errorHandler'));
-
-router.use('*', (req, res) => res.status(NOT_FOUND).send({ message: '404' }));
+router.use('*', (req, res, next) => next(new NotFoundError('Маршрут не найден')));
 
 module.exports = router;
